@@ -19,12 +19,21 @@
         .mouseup( eMouseUp )
         .mousedown( eMouseDown );
 
-    function eMouseMove ( e ) {
+    this.get(0).addEventListener( 'touchmove', eMouseMove );
+    document.addEventListener( 'touchstart', eMouseDown );
+    document.addEventListener( 'touchend', eMouseUp );
+
+    function eMouseMove ( event ) {
       if ( !mouseDown ) { return; }
+      if ( event.touches && event.touches.length ) {
+        event.preventDefault();
+        event = event.touches[0];
+      }
       var
         $this = $( this ),
         lastPos = $this.data( 'lastPos' ),
-        curPos = e[ 'page' + dragAxis ];
+        curPos = event[ 'page' + dragAxis ];
+
       if ( curPos > lastPos + options.sensitivity || curPos < lastPos - options.sensitivity ) {
         changeFrame.call( $this, curPos > lastPos ? 1 : -1 );
         $this.data( 'lastPos', curPos );
@@ -33,9 +42,8 @@
 
     function eMouseUp () { mouseDown = false; }
     function eMouseDown () { mouseDown = true; }
-    
+
     function changeFrame ( dir ) {
-        console.log( dir );
       var
         bgPos = parseInt( this.css( 'background-position-' + axis ), 10 ),
         newPos = bgPos + ( options.spriteDim[ axis ] * dir );
@@ -43,7 +51,7 @@
         newPos = 0;
       } else if ( newPos < 0 ) {
         newPos = options.spriteSheetDim[ axis ] - options.spriteDim[ axis ];
-      } 
+      }
       this.css( 'background-position-' + axis, newPos + 'px' );
     }
   };
