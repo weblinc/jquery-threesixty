@@ -55,7 +55,6 @@
         newPos = options.spriteSheetDim[ axis ] - options.spriteDim[ axis ];
       }
       bgPos[ axis ] = newPos;
-      console.log(bgPos.x, bgPos.y);
       this.css( 'background-position', bgPos.x + 'px ' + bgPos.y + 'px' );
     }
 
