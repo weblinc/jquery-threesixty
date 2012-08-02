@@ -12,15 +12,14 @@
     this.each(function () {
       $(this)
         .mousemove( eMouseMove )
+        .mousedown( eMouseDown )
         .data( 'lastPos', 0 );
+    
+      this.addEventListener( 'touchmove', eMouseMove );
+      this.addEventListener( 'touchstart', eMouseDown );
     });
 
-    $(document)
-        .mouseup( eMouseUp )
-        .mousedown( eMouseDown );
-
-    this.get(0).addEventListener( 'touchmove', eMouseMove );
-    document.addEventListener( 'touchstart', eMouseDown );
+    document.addEventListener( 'mouseup', eMouseUp );
     document.addEventListener( 'touchend', eMouseUp );
 
     function eMouseMove ( event ) {
@@ -41,18 +40,31 @@
     }
 
     function eMouseUp () { mouseDown = false; }
-    function eMouseDown () { mouseDown = true; }
+    function eMouseDown ( e ) { 
+      e.preventDefault();
+      mouseDown = true;
+    }
 
     function changeFrame ( dir ) {
       var
-        bgPos = parseInt( this.css( 'background-position-' + axis ), 10 ),
-        newPos = bgPos + ( options.spriteDim[ axis ] * dir );
+        bgPos = getBackgroundPos.call( this );
+        newPos = bgPos[ axis ] + ( options.spriteDim[ axis ] * dir );
       if ( newPos >= options.spriteSheetDim[ axis ] ) {
         newPos = 0;
       } else if ( newPos < 0 ) {
         newPos = options.spriteSheetDim[ axis ] - options.spriteDim[ axis ];
       }
-      this.css( 'background-position-' + axis, newPos + 'px' );
+      bgPos[ axis ] = newPos;
+      console.log(bgPos.x, bgPos.y);
+      this.css( 'background-position', bgPos.x + 'px ' + bgPos.y + 'px' );
+    }
+
+    function getBackgroundPos () {
+      var pos = ( this.css( 'background-position' ) || '' ).split(' ');
+      return {
+        x: parseInt( this.css( 'background-position-x' ) || pos[ 0 ], 10 ),
+        y: parseInt( this.css( 'background-position-y' ) || pos[ 1 ], 10 )
+      };
     }
   };
 
