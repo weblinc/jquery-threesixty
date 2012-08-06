@@ -22,16 +22,15 @@
       .bind( 'mouseup', eMouseUp )
       .bind( 'touchend', eMouseUp );
 
-    function eMouseMove ( event ) {
+    function eMouseMove ( e ) {
       if ( !mouseDown ) { return; }
-      if ( event.touches && event.touches.length ) {
-        event.preventDefault();
-        event = event.touches[0];
-      }
+      
+      e.preventDefault();
+      
       var
         $this = $( this ),
         lastPos = $this.data( 'lastPos' ),
-        curPos = event[ 'page' + dragAxis ];
+        curPos = normalizePosition( e );
 
       if ( curPos > lastPos + options.sensitivity || curPos < lastPos - options.sensitivity ) {
         changeFrame.call( $this, curPos > lastPos ? 1 : -1 );
@@ -42,6 +41,7 @@
     function eMouseUp () { mouseDown = false; }
     function eMouseDown ( e ) { 
       e.preventDefault();
+      $( this ).data( 'lastPos', normalizePosition( e ));
       mouseDown = true;
     }
 
@@ -64,6 +64,10 @@
         x: parseInt( this.css( 'background-position-x' ) || pos[ 0 ], 10 ),
         y: parseInt( this.css( 'background-position-y' ) || pos[ 1 ], 10 )
       };
+    }
+
+    function normalizePosition ( e ) {
+        return ( e.touches && e.touchs.length ? e.touches[0] : e )[ 'page' + dragAxis ];
     }
   };
 
