@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery 360</title>
+		<style>
+			.threesixty {
+				height: 390px;
+				width: 280px;
+				background-image: url(360.jpg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="threesixty"></div>
+		<script src="jquery.js"></script>
+		<script src="../src/jquery.threesixty.js"></script>
+		<script>
+			$('.threesixty').threesixty({
+				dragAxis: 'x',
+				spriteDim: { x: 280, y: 390 },
+				spriteSheetDim: { x: 280, y: 15600 },
+				sensitivity: 3
+			});
+		</script>
+	</body>
+</html>
