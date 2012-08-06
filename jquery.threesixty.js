@@ -13,14 +13,14 @@
       $(this)
         .mousemove( eMouseMove )
         .mousedown( eMouseDown )
+        .bind( 'touchmove', eMouseMove )
+        .bind( 'touchstart', eMouseDown )
         .data( 'lastPos', 0 );
-    
-      this.addEventListener( 'touchmove', eMouseMove );
-      this.addEventListener( 'touchstart', eMouseDown );
     });
 
-    document.addEventListener( 'mouseup', eMouseUp );
-    document.addEventListener( 'touchend', eMouseUp );
+    $( document )
+      .bind( 'mouseup', eMouseUp )
+      .bind( 'touchend', eMouseUp );
 
     function eMouseMove ( event ) {
       if ( !mouseDown ) { return; }
