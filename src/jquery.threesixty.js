@@ -13,20 +13,22 @@
       $(this)
         .mousemove( eMouseMove )
         .mousedown( eMouseDown )
-        .bind( 'touchmove', eMouseMove )
-        .bind( 'touchstart', eMouseDown )
         .data( 'lastPos', 0 );
+        
+      if ( this.addEventListener ) {
+        this.addEventListener( 'touchmove', eMouseMove );
+        this.addEventListener( 'touchstart', eMouseDown );
+      }
     });
 
-    $( document )
-      .bind( 'mouseup', eMouseUp )
-      .bind( 'touchend', eMouseUp );
+    $( document ).bind( 'mouseup', eMouseUp );
+    
+    if ( document.addEventListener  ) {
+      document.addEventListener( 'touchend', eMouseUp );
+    }
 
     function eMouseMove ( e ) {
       if ( !mouseDown ) { return; }
-      
-      e.preventDefault();
-      
       var
         $this = $( this ),
         lastPos = $this.data( 'lastPos' ),
@@ -36,13 +38,15 @@
         changeFrame.call( $this, curPos > lastPos ? 1 : -1 );
         $this.data( 'lastPos', curPos );
       }
+      
+      e.preventDefault();
     }
 
     function eMouseUp () { mouseDown = false; }
     function eMouseDown ( e ) { 
-      e.preventDefault();
       $( this ).data( 'lastPos', normalizePosition( e ));
       mouseDown = true;
+      e.preventDefault();
     }
 
     function changeFrame ( dir ) {
@@ -67,7 +71,7 @@
     }
 
     function normalizePosition ( e ) {
-        return ( e.touches && e.touchs.length ? e.touches[0] : e )[ 'page' + dragAxis ];
+        return ( e.touches && e.touches.length ? e.touches[0] : e )[ 'page' + dragAxis ];
     }
   };
 
