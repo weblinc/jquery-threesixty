@@ -13,36 +13,40 @@
       $(this)
         .mousemove( eMouseMove )
         .mousedown( eMouseDown )
-        .bind( 'touchmove', eMouseMove )
-        .bind( 'touchstart', eMouseDown )
         .data( 'lastPos', 0 );
+        
+      if ( this.addEventListener ) {
+        this.addEventListener( 'touchmove', eMouseMove );
+        this.addEventListener( 'touchstart', eMouseDown );
+      }
     });
 
-    $( document )
-      .bind( 'mouseup', eMouseUp )
-      .bind( 'touchend', eMouseUp );
+    $( document ).bind( 'mouseup', eMouseUp );
+    
+    if ( document.addEventListener  ) {
+      document.addEventListener( 'touchend', eMouseUp );
+    }
 
-    function eMouseMove ( event ) {
+    function eMouseMove ( e ) {
       if ( !mouseDown ) { return; }
-      if ( event.touches && event.touches.length ) {
-        event.preventDefault();
-        event = event.touches[0];
-      }
       var
         $this = $( this ),
         lastPos = $this.data( 'lastPos' ),
-        curPos = event[ 'page' + dragAxis ];
+        curPos = normalizePosition( e );
 
       if ( curPos > lastPos + options.sensitivity || curPos < lastPos - options.sensitivity ) {
         changeFrame.call( $this, curPos > lastPos ? 1 : -1 );
         $this.data( 'lastPos', curPos );
       }
+      
+      e.preventDefault();
     }
 
     function eMouseUp () { mouseDown = false; }
     function eMouseDown ( e ) { 
-      e.preventDefault();
+      $( this ).data( 'lastPos', normalizePosition( e ));
       mouseDown = true;
+      e.preventDefault();
     }
 
     function changeFrame ( dir ) {
@@ -64,6 +68,10 @@
         x: parseInt( this.css( 'background-position-x' ) || pos[ 0 ], 10 ),
         y: parseInt( this.css( 'background-position-y' ) || pos[ 1 ], 10 )
       };
+    }
+
+    function normalizePosition ( e ) {
+        return ( e.touches && e.touches.length ? e.touches[0] : e )[ 'page' + dragAxis ];
     }
   };
 
