@@ -1,8 +1,0 @@
-{
-  "JAVASCRIPT" : {
-    "DIST_DIR" : "./",
-    "jquery.threesixty" : [
-      "src/jquery.threesixty.js"
-    ]
-  }
-}
