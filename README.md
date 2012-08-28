@@ -1,7 +1,7 @@
 jquery.threesixty
 ====== 
 
-A jQuery plugin for 360 image rotations. Use a vertical/horizontal spritesheet (recommending [Sprite Factory](https://github.com/jakesgordon/sprite-factory) as a background-image on an element, call the plugin on the element, and magic happens. Much `<3` to [Aaron Bohenick](http://aaronbohenick.com/) for cat statue renders~
+A jQuery plugin for 360 image rotations. Use a vertical/horizontal spritesheet (recommending [Sprite Factory](https://github.com/jakesgordon/sprite-factory)) as a background-image on an element, call the plugin on the element, and magic happens. Much `<3` to [Aaron Bohenick](http://aaronbohenick.com/) for cat statue renders~
 
 Options
 ---
